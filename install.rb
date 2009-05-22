@@ -7,4 +7,4 @@ FileUtils.cp_r(
 )
 
 # Show the README text file
-puts IO.read(File.join(File.dirname(__FILE__), 'README'))
+puts IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
