@@ -5,14 +5,22 @@ FantomControls plugin let you hide controls (like links and buttons) from guests
 Often to hide controls from users dynamic block like this are used:
   
   <% if session[:user].is_admin? %>
+    <%= link_to 'edit', :action => :edit, :id => page.id %>
   <% end %>
 
 This code can't be cached. Fantom Plugin let you replace this by:
 
   <% fantom_block_for 'admin' do %>
+    <%= link_to 'edit', :action => :edit, :id => page.id %>
   <% end %>
 
-that generates static code and can be cached.
+this generates static code:
+
+  <div class="fantom fantom_access_group_admin">
+    <a href="/pages/edit/541">edit</a>
+  </div>
+
+and can be cached.
 
 
 = !!! Important !!!
@@ -22,9 +30,11 @@ This is not a security feature!
 
 = Installation
 
-To use fantom plugin you need to have {jquery}[http://jquery.com] and {jquery.cookie}[http://plugins.jquery.com/project/Cookie] in your public dir. 
+Install Fantom Plugin from github:
 
-Include jquery and jquery.cookie in layout:
+  $ ruby script/plugin install git://github.com/sergio-fry/fantom_controls.git
+
+Fantom Plugin requires {jquery}[http://jquery.com] and {jquery.cookie}[http://plugins.jquery.com/project/Cookie]. Include them in your layout:
 
   <%= javascript_include_tag 'jquery' %>
   <%= javascript_include_tag 'jquery.cookie' %>
@@ -33,16 +43,19 @@ and don't forget about fantom_controls script:
 
   <%= javascript_include_tag 'fantom_controls' %>
 
-
 = Usage
 
-While authorizating user tell to Fantom Plugin wich access groups this user belongs:
+While authorizating user tell to Fantom Plugin wich access groups this user belongs to:
 
   class SessionsController < ApplicationController
     def create
       # check username and password
       # fetch user data from database
+      # ...
        
+      # user belongs to
+      # (replace this by corresponding to your user model
+      #
       if user.is_admin?
         fantom_groups ['user', 'admin']
       else
@@ -51,7 +64,6 @@ While authorizating user tell to Fantom Plugin wich access groups this user belo
 
     end
   end
-  
 
 Add fantom blocks to your page. For example, this will be visible only for authorizated users:
 
@@ -62,6 +74,12 @@ Add fantom blocks to your page. For example, this will be visible only for autho
 and this only for admin:
 
   <% fantom_block_for 'admin' do %>
+    <%= link_to 'edit page', :controller => :pages, :action => :edit, :id => page.id %>
+  <% end %>
+
+and this one for managers and admins:
+  
+  <% fantom_block_for ['admin', 'manager'] do %>
     <%= link_to 'edit page', :controller => :pages, :action => :edit, :id => page.id %>
   <% end %>
 
