@@ -39,8 +39,9 @@ Fantom Plugin requires {jquery}[http://jquery.com] and {jquery.cookie}[http://pl
   <%= javascript_include_tag 'jquery' %>
   <%= javascript_include_tag 'jquery.cookie' %>
 
-and don't forget about fantom_controls script:
+and don't forget about fantom_controls.js and fantom_controls.css:
 
+  <%= stylesheet_link_tag 'fantom_controls' %>
   <%= javascript_include_tag 'fantom_controls' %>
 
 = Usage
