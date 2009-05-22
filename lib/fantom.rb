@@ -1,6 +1,6 @@
 module FantomControls
   module Helpers
-    def fantom_block_dev(groups, &block)
+    def fantom_block_for(groups, &block)
       if block_given?
         content_tag(:div, :class => "fantom " + groups.to_a.map{|g| "fantom_access_group_" + g.to_s}.join(" "), &block)
       else
