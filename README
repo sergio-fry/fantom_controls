@@ -1,13 +1,70 @@
-FantomControls
-==============
+= FantomControls
 
-Hide your controls from non-authorizated users.
+FantomControls plugin let you hide controls (like links and buttons) from guests or non-admin users on cached pages. 
+
+Often to hide controls from users dynamic block like this are used:
+  
+  <% if session[:user].is_admin? %>
+  <% end %>
+
+This code can't be cached. Fantom Plugin let you replace this by:
+
+  <% fantom_block_for 'admin' do %>
+  <% end %>
+
+that generates static code and can be cached.
 
 
-Example
-=======
+= !!! Important !!!
 
-Example goes here.
+This is not a security feature!
+
+
+= Installation
+
+To use fantom plugin you need to have {jquery}[http://jquery.com] and {jquery.cookie}[http://plugins.jquery.com/project/Cookie] in your public dir. 
+
+Include jquery and jquery.cookie in layout:
+
+  <%= javascript_include_tag 'jquery' %>
+  <%= javascript_include_tag 'jquery.cookie' %>
+
+and don't forget about fantom_controls script:
+
+  <%= javascript_include_tag 'fantom_controls' %>
+
+
+= Usage
+
+While authorizating user tell to Fantom Plugin wich access groups this user belongs:
+
+  class SessionsController < ApplicationController
+    def create
+      # check username and password
+      # fetch user data from database
+       
+      if user.is_admin?
+        fantom_groups ['user', 'admin']
+      else
+        fantom_groups ['user']
+      end
+
+    end
+  end
+  
+
+Add fantom blocks to your page. For example, this will be visible only for authorizated users:
+
+  <% fantom_block_for 'user' do %>
+    <%= link_to 'new comment', :controller => :comments, :action => :new %>
+  <% end %>
+
+and this only for admin:
+
+  <% fantom_block_for 'admin' do %>
+    <%= link_to 'edit page', :controller => :pages, :action => :edit, :id => page.id %>
+  <% end %>
+
 
 
 Copyright (c) 2009 Sergei O. Udalov, released under the MIT license
