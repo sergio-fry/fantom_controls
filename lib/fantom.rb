@@ -12,8 +12,8 @@ module FantomControls
   end
 
   module Controller
-    def fantom_groups groups
-      cookies[:fantom_access_groups] = groups.to_a.map{|g| g.to_s}.join(",")
+    def fantom_groups groups, expires=nil
+      cookies[:fantom_access_groups] = {:value => groups.to_a.map{|g| g.to_s}.join(","), :expires => expires}
     end
   end
 end
